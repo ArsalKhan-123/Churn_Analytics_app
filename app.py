@@ -15,15 +15,68 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Custom CSS Styling ---
+# --- Custom CSS Styling & Hero Banner ---
 st.markdown("""
 <style>
-    /* Main Background & Font Styling */
+    /* Main Background & Base Styling */
     .stApp {
         background-color: #0E1117;
     }
     
-    /* Card Container Styling */
+    /* Hero Header Container */
+    .hero-container {
+        background: linear-gradient(135deg, #161B22 0%, #0D1117 100%);
+        border: 1px solid #30363D;
+        border-left: 5px solid #2F81F7;
+        border-radius: 12px;
+        padding: 24px 28px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .hero-title {
+        color: #F0F6FC;
+        font-size: 2.1rem;
+        font-weight: 800;
+        margin: 0 0 6px 0;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .hero-subtitle {
+        color: #8B949E;
+        font-size: 1.05rem;
+        margin: 0 0 16px 0;
+        font-weight: 400;
+    }
+    /* Status Pills */
+    .pill-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .pill {
+        background-color: #21262D;
+        border: 1px solid #30363D;
+        color: #C9D1D9;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .pill-blue {
+        border-color: #1F6FEB;
+        color: #58A6FF;
+    }
+    .pill-green {
+        border-color: #238636;
+        color: #3FB950;
+    }
+
+    /* Card Metric Styling */
     div[data-testid="stMetricValue"] {
         font-size: 1.8rem !important;
         font-weight: 700 !important;
@@ -57,18 +110,22 @@ st.markdown("""
         color: #FFFFFF !important;
         font-weight: 600;
     }
-    
-    /* Custom Header Subtitles */
-    .sub-title {
-        color: #8B949E;
-        font-size: 0.95rem;
-        margin-bottom: 25px;
-    }
 </style>
-""", unsafe_allow_html=True)
 
-st.title("⚡ Predictive Customer Churn & Retention Engine")
-st.markdown('<p class="sub-title">Advanced Machine Learning analytics for retention optimization, risk quantification, and revenue defense.</p>', unsafe_allow_html=True)
+<div class="hero-container">
+    <div class="hero-title">
+        ⚡ Customer Churn & Retention Analytics
+    </div>
+    <div class="hero-subtitle">
+        Enterprise Machine Learning engine for proactive churn risk prediction, ARR exposure modeling, and retention campaign targeting.
+    </div>
+    <div class="pill-container">
+        <span class="pill pill-blue">🤖 Model: Random Forest Classifier</span>
+        <span class="pill pill-green">🟢 Status: Live Inference</span>
+        <span class="pill">📊 Metrics: Real-time ROI & AUC Analysis</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # --- Helper: Plotly Dark Layout Styling ---
 def apply_dark_theme(fig):
@@ -281,7 +338,6 @@ if df is not None:
                     by='Churn_Probability', ascending=False
                 ).copy()
                 
-                # Format Probability column to percentage display
                 high_risk_df['Risk_Score_%'] = (high_risk_df['Churn_Probability'] * 100).round(1)
                 
                 st.write(f"Displaying **{len(high_risk_df)}** target customers with risk score ≥ **{int(risk_threshold*100)}%**:")
@@ -378,10 +434,16 @@ if df is not None:
                     x_labels = ['Retained (0)', 'Churned (1)']
                     y_labels = ['Retained (0)', 'Churned (1)']
                     
-                    fig_cm = ff.create_annotated_heatmap(
-                        z=cm, x=x_labels, y=y_labels, colorscale='Blues', showscale=False
+                    fig_cm = px.imshow(
+                        cm, 
+                        x=x_labels, 
+                        y=y_labels, 
+                        text_auto=True, 
+                        color_continuous_scale='Blues',
+                        aspect="auto"
                     )
                     fig_cm.update_layout(xaxis_title="Predicted Label", yaxis_title="Actual Label")
+                    fig_cm.update_coloraxes(showscale=False)
                     st.plotly_chart(apply_dark_theme(fig_cm), use_container_width=True)
                 
             with e_col2:
