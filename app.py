@@ -22,6 +22,11 @@ st.markdown("""
     .stApp {
         background-color: #0E1117;
     }
+
+    /* Remove top margin/padding in Sidebar */
+    div[data-testid="stSidebarUserContent"] {
+        padding-top: 1rem !important;
+    }
     
     /* Hero Header Container */
     .hero-container {
@@ -111,20 +116,6 @@ st.markdown("""
         font-weight: 600;
     }
 </style>
-
-<div class="hero-container">
-    <div class="hero-title">
-        ⚡ Customer Churn & Retention Analytics
-    </div>
-    <div class="hero-subtitle">
-        Enterprise Machine Learning engine for proactive churn risk prediction, ARR exposure modeling, and retention campaign targeting.
-    </div>
-    <div class="pill-container">
-        <span class="pill pill-blue">🤖 Model: Random Forest Classifier</span>
-        <span class="pill pill-green">🟢 Status: Live Inference</span>
-        <span class="pill">📊 Metrics: Real-time ROI & AUC Analysis</span>
-    </div>
-</div>
 """, unsafe_allow_html=True)
 
 # --- Helper: Plotly Dark Layout Styling ---
